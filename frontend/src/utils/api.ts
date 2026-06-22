@@ -1,7 +1,7 @@
 // Central API client with automatic JWT injection and error handling
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+  process.env.NEXT_PUBLIC_API_URL || 'https://trao-ai-8m4e.vercel.app/';
 
 // ─── Token Helpers ─────────────────────────────────────────────────────────────
 
