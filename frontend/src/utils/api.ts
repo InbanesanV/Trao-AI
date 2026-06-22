@@ -2,6 +2,10 @@
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || 'https://trao-ai-8m4e.vercel.app/';
+const baseUrl = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
+const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+
+
 
 // ─── Token Helpers ─────────────────────────────────────────────────────────────
 
@@ -63,7 +67,7 @@ async function apiRequest<T>(
     config.body = JSON.stringify(body);
   }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+  const response = await fetch(`${baseUrl}${cleanEndpoint}`, config);
   const data = await response.json();
 
   if (!response.ok) {
