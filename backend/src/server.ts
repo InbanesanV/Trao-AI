@@ -21,13 +21,17 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, curl, Postman)
-            // or if origin is in allowedOrigins list, or if it is a Vercel preview URL
-      if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
-        callback(null, true);
-      } else {
-        callback(new Error(`CORS policy violation: Origin '${origin}' is not allowed.`));
+      if (!origin) {
+        return callback(null, true);
       }
+      
+      // Allow any vercel preview or main domain using regex
+      const isVercel = /^https?:\/\/.*\.vercel\.app\/?$/.test(origin);
+      if (isVercel || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      
+      callback(new Error(`CORS policy violation: Origin '${origin}' is not allowed.`));
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -45,6 +49,7 @@ app.get('/health', (_req, res) => {
     status: 'healthy',
     service: 'Trao AI Travel Planner API',
     version: '1.0.0',
+    deployment: 'v2', // Added to test if Vercel is building the latest commit
     timestamp: new Date().toISOString(),
   });
 });
